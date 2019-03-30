@@ -1,0 +1,4 @@
+% Comentario
+/* COmentario //
+ Comentario dos*/ 
+27+15; %comentario 1 +2
