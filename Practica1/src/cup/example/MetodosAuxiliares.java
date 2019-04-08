@@ -2,10 +2,9 @@ package cup.example;
 import java.lang.*;
 
 
-public class Aux {
+public class MetodosAuxiliares {
 	public static void main(String[] args) throws Exception {
-		Octalconverter("11o");
-		System.out.println(Math.sin(0));
+		
 	}
 
 	//Metodo para convertir un string que es un numero octal a double

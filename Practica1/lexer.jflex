@@ -110,7 +110,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   {Entero}     {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
   {Real} {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
   {Real1} { return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
-  {Real2} { return symbolFactory.newSymbol("NUMBER", NUMBER, Aux.Octalconverter(yytext()));}
+  {Real2} { return symbolFactory.newSymbol("NUMBER", NUMBER, MetodosAuxiliares.Octalconverter(yytext()));}
   
   /*{Number} { return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }*/
 }
