@@ -5,6 +5,7 @@ import java_cup.runtime.Symbol;
 import java.lang.*;
 import java.io.InputStreamReader;
 
+
 %%
 
 %class Lexer
@@ -53,16 +54,20 @@ import java.io.InputStreamReader;
     			(yyline+1) + " " + (yycolumn+1) + " " + yychar);
     }
 %}
+//Notas
+//Usar el infinito de java
+//EN EL manual de cup hay prioridades
+//minus o algo asi no se usa para nada
 
 Newline    = \r | \n | \r\n
 Whitespace = [ \t\f] | {Newline}
 //Number     = [0-9]+
-
+/* Numeros */
 Number = {Entero} | {Real} | {Real1} | {Real2}
 Entero = [0-9]+
-Real = [0-9]+.[0-9]+
-Real1 = {Real}[eE] [\+\-]?{Entero}
-Real2 = {Real}[\+\-]?{Entero} [oO]
+Real = {Entero} \. {Entero}
+Real1 = {Real}[eE] [\+\-]?{Entero} | {Entero}[eE] [\+\-]?{Entero}
+Real2 = {Entero} [oO]
 //Funcion para convertir de octales a numeros normales
 
 /* Comments */
@@ -72,6 +77,8 @@ NewCommentContent =  [^\r\n]*
 TraditionalComment = "/*" {CommentContent} \*+ "/" | 
 EndOfLineComment = "//" [^\r\n]* {Newline} 
 CommentContent = ( [^*] | \*+[^*/] )*
+
+
 
 ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 
@@ -92,14 +99,20 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "+"          { return symbolFactory.newSymbol("PLUS", PLUS); }
   "-"          { return symbolFactory.newSymbol("MINUS", MINUS); }
   "*"          { return symbolFactory.newSymbol("TIMES", TIMES); }
+  "/"          { return symbolFactory.newSymbol("DIV", DIV); }
   "n"          { return symbolFactory.newSymbol("UMINUS", UMINUS); }
   "("          { return symbolFactory.newSymbol("LPAREN", LPAREN); }
   ")"          { return symbolFactory.newSymbol("RPAREN", RPAREN); }
-  
-  {Entero}     { return symbolFactory.newSymbol("NUMBER", NUMBER, Integer.parseInt(yytext())); }
-  {Real} { return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
+ "sin"      { return symbolFactory.newSymbol("SIN", SIN); }
+ "cos"    	{ return symbolFactory.newSymbol("COS", COS); }
+ "exp"    	{ return symbolFactory.newSymbol("EXP", EXP); }
+ "log"    	{ return symbolFactory.newSymbol("LOG", LOG); }
+  {Entero}     {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
+  {Real} {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
   {Real1} { return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
-  {Real2} { }
+  {Real2} { return symbolFactory.newSymbol("NUMBER", NUMBER, Aux.Octalconverter(yytext()));}
+  
+  /*{Number} { return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }*/
 }
 
 

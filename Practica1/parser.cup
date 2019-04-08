@@ -31,17 +31,18 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PLUS, MINUS, UMINUS, TIMES, LPAREN, RPAREN;
-terminal Integer    NUMBER;        // our scanner provides numbers as integers
+terminal            SEMI, PLUS, MINUS, UMINUS, TIMES,DIV, LPAREN, RPAREN, EXP, LOG, SIN, COS;
+//terminal Integer    NUMBER;        // our scanner provides numbers as integers
+terminal Double NUMBER; //Cambiamos a double los numeros
+
 
 /* Non terminals */
 non terminal            expr_list;
-non terminal Integer    expr;      // used to store evaluated subexpressions
+//non terminal Integer    expr;      // used to store evaluated subexpressions
+non terminal Double expr; //Cambiamos a double los resultados
 
 /* Precedences */
-precedence left PLUS, MINUS;
-precedence left TIMES;
-precedence left UMINUS;
+
 
 /* The grammar rules */
 expr_list ::= expr_list expr:e SEMI         {: System.out.println(e); :}
@@ -51,9 +52,14 @@ expr_list ::= expr_list expr:e SEMI         {: System.out.println(e); :}
 expr      ::= expr:e1 PLUS  expr:e2         {: RESULT = e1+e2;        :}
              | expr:e1 MINUS expr:e2        {: RESULT = e1-e2;        :}
              | expr:e1 TIMES expr:e2        {: RESULT = e1*e2;        :}
+             | expr:e1  DIV expr:e2        {: RESULT = e1/e2;        :} //Añadimos la regla de la division
              | MINUS expr:e                 {: RESULT = -e;           :}
              %prec UMINUS
              | LPAREN expr:e RPAREN	         {: RESULT = e;           :}
              | NUMBER:n	                     {: RESULT = n;           :}
+             | SIN LPAREN expr:e1 RPAREN        {: RESULT = Math.sin(e1);  :} //Seno
+			 | COS LPAREN expr:e1 RPAREN        {: RESULT = Math.cos(e1);  :} //Seno	
+			 | EXP LPAREN expr:e1 RPAREN        {: RESULT = Math.exp(e1);  :} //Seno
+			 | LOG LPAREN expr:e1 RPAREN        {: RESULT = Math.log(e1);  :} //Seno
              ;
        
