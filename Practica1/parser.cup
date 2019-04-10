@@ -52,18 +52,19 @@ expr_list ::= expr_list expr:e SEMI         {: System.out.println(e); :}
 expr_uno      ::= expr_uno:e1 PLUS  expr_dos:e2         {: RESULT = e1+e2;        :}
              | expr_uno:e1 MINUS expr_dos:e2        {: RESULT = e1-e2;        :}  
              | expr_dos:e1  						{: RESULT= e1; :}  
-             | SIN LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.sin(e1);  :} //Seno
-			 | COS LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.cos(e1);  :} //Coseno
-			 | EXP LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.exp(e1);  :} //Exponente
-			 | LOG LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.log(e1);  :} //Logaritmo
+             
              ;
 expr_dos ::= expr_dos:e1 TIMES expr_tres:e2        	{: RESULT = e1*e2;        :}
              | expr_dos:e1  DIV expr_tres:e2        {: RESULT = e1/e2;        :} //Añadimos la regla de la division 
-			| expr_tres:e1 				{: RESULT= e1; :}
+			 | expr_tres:e1 				{: RESULT= e1; :}
 			;
 			
 expr_tres ::= 	signo:s LPAREN expr_tres:e RPAREN	         {: RESULT = s*e;           :}
-             | signo:s NUMBER:n	                     {: RESULT = s*n;           :}	
+             | signo:s NUMBER:n	                     {: RESULT = s*n;           :}
+             | SIN LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.sin(e1);  :} //Seno
+			 | COS LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.cos(e1);  :} //Coseno
+			 | EXP LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.exp(e1);  :} //Exponente
+			 | LOG LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.log(e1);  :} //Logaritmo	
              ;
              
 signo ::=    MINUS      {: RESULT = -1.0;           :}
