@@ -70,6 +70,7 @@ Real1 = {Real}[eE] [\+\-]?{Entero} | {Entero}[eE] [\+\-]?{Entero}
 Real2 = {Entero} [oO]
 //Funcion para convertir de octales a numeros normales
 
+
 /* Comments */
 Comment = {TraditionalComment} | {EndOfLineComment} 
 NewComment = "%" {NewCommentContent} {Newline}
@@ -100,13 +101,14 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "-"          { return symbolFactory.newSymbol("MINUS", MINUS); }
   "*"          { return symbolFactory.newSymbol("TIMES", TIMES); }
   "/"          { return symbolFactory.newSymbol("DIV", DIV); }
-  "n"          { return symbolFactory.newSymbol("UMINUS", UMINUS); }
   "("          { return symbolFactory.newSymbol("LPAREN", LPAREN); }
   ")"          { return symbolFactory.newSymbol("RPAREN", RPAREN); }
  "sin"      { return symbolFactory.newSymbol("SIN", SIN); }
  "cos"    	{ return symbolFactory.newSymbol("COS", COS); }
  "exp"    	{ return symbolFactory.newSymbol("EXP", EXP); }
  "log"    	{ return symbolFactory.newSymbol("LOG", LOG); }
+ "="        {return symbolFactory.newSymbol("IGUAL", IGUAL);}
+  "MEM"        {return symbolFactory.newSymbol("MEM", MEM);}
  "INF"		{ return symbolFactory.newSymbol("NUMBER", NUMBER, Double.POSITIVE_INFINITY); }
   {Entero}     {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
   {Real} {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
