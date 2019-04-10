@@ -63,7 +63,7 @@ Newline    = \r | \n | \r\n
 Whitespace = [ \t\f] | {Newline}
 //Number     = [0-9]+
 /* Numeros */
-Number = {Entero} | {Real} | {Real1} | {Real2}
+Number = {Entero} | {Real} | {Real1} | {Real2} | "INF" 
 Entero = [0-9]+
 Real = {Entero} \. {Entero}
 Real1 = {Real}[eE] [\+\-]?{Entero} | {Entero}[eE] [\+\-]?{Entero}
@@ -107,11 +107,11 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
  "cos"    	{ return symbolFactory.newSymbol("COS", COS); }
  "exp"    	{ return symbolFactory.newSymbol("EXP", EXP); }
  "log"    	{ return symbolFactory.newSymbol("LOG", LOG); }
+ "INF"		{ return symbolFactory.newSymbol("NUMBER", NUMBER, Double.POSITIVE_INFINITY); }
   {Entero}     {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
   {Real} {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
   {Real1} { return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
   {Real2} { return symbolFactory.newSymbol("NUMBER", NUMBER, MetodosAuxiliares.Octalconverter(yytext()));}
-  
   /*{Number} { return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }*/
 }
 
