@@ -1,0 +1,66 @@
+%Comentario
+%Numeros
+1;		%La salida esperada es 1
+-1;		%La salida esperada es -1
+
+%Varios caracteres
+24567437;
++2345896237;
+-34562346;
+
+%Reales y cientificos
+1.1;	
+1.1E-16;
+1.1e-16;
+1E-16;
+1e-16;
+5.3+1e-1;
+5.3+11o;
+
+%Octales
+1o;
+1O;
+
+%Operaciones básicas
+1+1;	%La salida esperada es 2
+1-1;	%La salida esperada es 0
+1*3;	%La salida esperada es 3
+10/5;	%La salida esperada es 2
+
+%Trigonométricas
+sin(3.1416/2);%La salida esperada es casi 1
+cos(3.1416/2);%La salida esperada es casi 0
+
+%Operaciones avanzadas
+1+(2-3);
+1+(2+3);
+1-(2*3);
+1*(2+3);
+10/(2+3);
+5 * +3 - 80/10;
+10 / 5 * 2;
+- 3 *4;
+5 * (4-3) / (8 - (4-1));  
+
+%Infinitos
+INF + 4;
+INF / -1;
+13/0;
+10/INF;
+INF * -INF;
+
+%Not a number
+INF - INF;
+-INF + INF;
+0 / 0;
+0 * INF;
+INF / INF;  
+
+%Memoria
+MEM=5;
+MEM;
+MEM = MEM +cos(5);
+MEM = (-(7*MEM)+-6)*-1;
+MEM/2;
+MEM = INF;
+MEM/MEM;
