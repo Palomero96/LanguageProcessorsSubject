@@ -24,8 +24,8 @@ import java_cup.runtime.*;
 %char
 %{
 	private TablaSimbolos tabla;
- public void Yylex(java.io.Reader in, TablaSimbolos t){this(in);
- 				
+ public Lexer(java.io.Reader in, TablaSimbolos t){
+ 				this(in);
  				this.tabla = t;
  }
 
@@ -116,7 +116,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
  "exp"    	{ return symbolFactory.newSymbol("EXP", EXP); }
  "log"    	{ return symbolFactory.newSymbol("LOG", LOG); }
  "="        {return symbolFactory.newSymbol("IGUAL", IGUAL);}
- ","          { return symbolFactory.newSymbol("COMA", COMA); }
+ //","          { return symbolFactory.newSymbol("COMA", COMA); }
  //COMPARADORES
  "<="       {return symbolFactory.newSymbol("MENORIGUAL", MENORIGUAL);}
  ">="       {return symbolFactory.newSymbol("MAYORIGUAL", MAYORIGUAL);}
@@ -141,10 +141,10 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "REAL"	{return symbolFactory.newSymbol("REAL", REAL);}
   "TRUE"	{return symbolFactory.newSymbol("TRUE", TRUE);}
   "FALSO"   {return symbolFactory.newSymbol("FALSO", FALSO);}
-//{ident} {
-								// Simbolo s;
-								 //if ((s = tabla.buscar(yytext())) == null)
-								//s = tabla.insertar(yytext()); return new Symbol(sym.ID, s); }
+{ident} {
+								 Simbolo s;
+								 if ((s = tabla.buscar(yytext())) == null)
+								s = tabla.insertar(yytext()); return new Symbol(sym.ID, s); }
  
  //"MEM"      {return symbolFactory.newSymbol("MEM", MEM);}
  "INF"		{ return symbolFactory.newSymbol("NUMBER", NUMBER, Double.POSITIVE_INFINITY); }

@@ -17,10 +17,10 @@ protected Lexer lexer;
 private double MEM=0;
 static TablaSimbolos tabla = new TablaSimbolos();
   
-	public static void main(String[] arg){
- parser parserObj = new parser();
- Yylex miAnalizadorLexico =
- new Yylex(new InputStreamReader(System.in), tabla);
+public static void main(String[] arg){
+ Parser parserObj = new Parser();
+ Lexer miAnalizadorLexico =
+ new Lexer(new java.io.Reader(System.in), tabla);
  parserObj.setScanner(miAnalizadorLexico);
  try{
  parserObj.parse();
@@ -48,7 +48,7 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PLUS, MINUS, TIMES,DIV, LPAREN, RPAREN, COMA, EXP, LOG, SIN, COS, IGUAL, MEM;
+terminal            SEMI, PLUS, MINUS, TIMES,DIV, LPAREN, RPAREN, EXP, LOG, SIN, COS, IGUAL, MEM;
 terminal MENORIGUAL, MAYORIGUAL, IGUALIGUAL, MENOR, MAYOR;
 terminal AND, OR, NOT;
 terminal SI, SINO, ENTONCES, FINSI, MIENTRAS, FINMIENTRAS;
@@ -59,7 +59,7 @@ terminal Double NUMBER; //Cambiamos a double los numeros
 
 /* Non terminals */
 non terminal            expr_list,asignacion;
-non terminal S, T, A, D, L, C, O, B, V, Q, QUNO, E, V, SIG;
+non terminal S, T, A, D, L, C, O, V, Q, QUNO, E, V, SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
 non terminal  expr_uno, expr_dos, expr_tres, signo; //Cambiamos a double los resultados
 
@@ -82,7 +82,7 @@ O::= V MAYORIGUAL V | V MENORIGUAL V | V IGUALIGUAL V | V MAYOR V | V MENOR V | 
 /* Declaraciones*/
 D::= REAL Q | BOOLEANO Q;
 Q::=ID | QUNO;
-QUNO::= /* LAMBDA */ | COMA Q;
+QUNO::= /* LAMBDA */ ;
 
 /* Asignaciones*/
 A::=ID IGUAL T | ID IGUAL O;
