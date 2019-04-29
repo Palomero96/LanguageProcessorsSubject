@@ -8,22 +8,41 @@ package cup.example;
 /** CUP generated interface containing symbol constants. */
 public interface sym {
   /* terminals */
-  public static final int MINUS = 4;
-  public static final int SIN = 11;
-  public static final int NUMBER = 15;
-  public static final int MEM = 14;
-  public static final int SEMI = 2;
-  public static final int COS = 12;
-  public static final int EOF = 0;
-  public static final int PLUS = 3;
-  public static final int DIV = 6;
-  public static final int IGUAL = 13;
-  public static final int error = 1;
-  public static final int RPAREN = 8;
   public static final int TIMES = 5;
-  public static final int EXP = 9;
+  public static final int AND = 20;
+  public static final int MENOR = 18;
+  public static final int IGUALIGUAL = 17;
+  public static final int SIN = 11;
+  public static final int PLUS = 3;
+  public static final int OR = 21;
+  public static final int RPAREN = 8;
+  public static final int IGUAL = 13;
+  public static final int MENORIGUAL = 15;
+  public static final int COS = 12;
+  public static final int SEMI = 2;
+  public static final int ENTONCES = 25;
+  public static final int NOT = 22;
+  public static final int TRUE = 31;
   public static final int LPAREN = 7;
+  public static final int ID = 34;
+  public static final int BOOLEANO = 29;
   public static final int LOG = 10;
+  public static final int EXP = 9;
+  public static final int MEM = 14;
+  public static final int FALSO = 32;
+  public static final int NUMBER = 33;
+  public static final int FINMIENTRAS = 28;
+  public static final int MAYOR = 19;
+  public static final int EOF = 0;
+  public static final int SINO = 24;
+  public static final int DIV = 6;
+  public static final int MAYORIGUAL = 16;
+  public static final int SI = 23;
+  public static final int MINUS = 4;
+  public static final int error = 1;
+  public static final int REAL = 30;
+  public static final int MIENTRAS = 27;
+  public static final int FINSI = 26;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -40,7 +59,26 @@ public interface sym {
   "COS",
   "IGUAL",
   "MEM",
-  "NUMBER"
+  "MENORIGUAL",
+  "MAYORIGUAL",
+  "IGUALIGUAL",
+  "MENOR",
+  "MAYOR",
+  "AND",
+  "OR",
+  "NOT",
+  "SI",
+  "SINO",
+  "ENTONCES",
+  "FINSI",
+  "MIENTRAS",
+  "FINMIENTRAS",
+  "BOOLEANO",
+  "REAL",
+  "TRUE",
+  "FALSO",
+  "NUMBER",
+  "ID"
   };
 }
 

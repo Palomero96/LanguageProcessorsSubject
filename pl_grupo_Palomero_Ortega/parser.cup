@@ -12,23 +12,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 parser code {:
-protected Lexer lexer;
-private double MEM=0;
-static TablaSimbolos tabla = new TablaSimbolos();
-  
-	public static void main(String[] arg){
- parser parserObj = new parser();
- Yylex miAnalizadorLexico =
- new Yylex(new InputStreamReader(System.in), tabla);
- parserObj.setScanner(miAnalizadorLexico);
- try{
- parserObj.parse();
- tabla.imprimir();
- }catch(Exception x){
- x.printStackTrace();
- System.out.println("Error fatal.\n");
-}
- }
+  protected Lexer lexer;
+	double MEM=0;
 :}
 
 /* define how to connect to the scanner! */
@@ -48,12 +33,7 @@ scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
 terminal            SEMI, PLUS, MINUS, TIMES,DIV, LPAREN, RPAREN, EXP, LOG, SIN, COS, IGUAL, MEM;
-terminal MENORIGUAL, MAYORIGUAL, IGUALIGUAL, MENOR, MAYOR;
-terminal AND, OR, NOT;
-terminal SI, SINO, ENTONCES, FINSI, MIENTRAS, FINMIENTRAS;
-terminal BOOLEANO, REAL, TRUE, FALSO;
 terminal Double NUMBER; //Cambiamos a double los numeros
- terminal Simbolo ID;
 
 
 /* Non terminals */

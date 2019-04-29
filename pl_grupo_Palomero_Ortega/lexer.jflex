@@ -3,31 +3,21 @@ import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.Symbol;
 import java.lang.*;
-import java.io.*;
-import java_cup.runtime.*;
+import java.io.InputStreamReader;
 
 
 %%
 
-
- 
-
 %class Lexer
 %implements sym
 %public
- 
-
 %unicode
 %line
 %column
 %cup
 %char
 %{
-	private TablaSimbolos tabla;
- public void Yylex(Reader in, TablaSimbolos t){
- this(in);
- this.tabla = t;
- }
+	
 
     public Lexer(ComplexSymbolFactory sf, java.io.InputStream is){
 		this(is);
@@ -41,7 +31,7 @@ import java_cup.runtime.*;
     private StringBuffer sb;
     private ComplexSymbolFactory symbolFactory;
     private int csline,cscolumn;
-	
+
     public Symbol symbol(String name, int code){
 		return symbolFactory.newSymbol(name, code,
 						new Location(yyline+1,yycolumn+1, yychar), // -yylength()
@@ -64,7 +54,10 @@ import java_cup.runtime.*;
     			(yyline+1) + " " + (yycolumn+1) + " " + yychar);
     }
 %}
-
+//Notas
+//Usar el infinito de java
+//EN EL manual de cup hay prioridades
+//minus o algo asi no se usa para nada
 
 Newline    = \r | \n | \r\n
 Whitespace = [ \t\f] | {Newline}
@@ -77,6 +70,7 @@ Real1 = {Real}[eE] [\+\-]?{Entero} | {Entero}[eE] [\+\-]?{Entero}
 Real2 = {Entero} [oO]
 //Funcion para convertir de octales a numeros normales
 
+
 /* Comments */
 Comment = {TraditionalComment} | {EndOfLineComment} 
 NewComment = "%" {NewCommentContent} {Newline}
@@ -85,8 +79,6 @@ TraditionalComment = "/*" {CommentContent} \*+ "/" |
 EndOfLineComment = "//" [^\r\n]* {Newline} 
 CommentContent = ( [^*] | \*+[^*/] )*
 
-/* Identificadores*/
-Identificador = [a-zA-Z][a-zA-Z0-9]* 
 
 
 ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
@@ -98,7 +90,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 
 %state CODESEG
 
-%%   
+%%  
 
 <YYINITIAL> {
 {TraditionalComment} { } //añadimos que si se encuentra Traditional comment no haga nada
@@ -116,36 +108,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
  "exp"    	{ return symbolFactory.newSymbol("EXP", EXP); }
  "log"    	{ return symbolFactory.newSymbol("LOG", LOG); }
  "="        {return symbolFactory.newSymbol("IGUAL", IGUAL);}
- //COMPARADORES
- "<="       {return symbolFactory.newSymbol("MENORIGUAL", MENORIGUAL);}
- ">="       {return symbolFactory.newSymbol("MAYORIGUAL", MAYORIGUAL);}
- "=="       {return symbolFactory.newSymbol("IGUALIGUAL", IGUALIGUAL);}
-  "<"       {return symbolFactory.newSymbol("MENOR", MENOR);}
-  ">"       {return symbolFactory.newSymbol("MAYOR", MAYOR);}
-  //BOOLEANOS
-  "AND" {return symbolFactory.newSymbol("AND", AND);}
-  "OR"    {return symbolFactory.newSymbol("OR", OR);}
-  "NOT"   {return symbolFactory.newSymbol("NOT", NOT);}
-  //BUCLES Y CONDICIONALES
-  "SI"    {return symbolFactory.newSymbol("SI", SI);}
-  "SINO"    {return symbolFactory.newSymbol("SINO", SINO);}
-  "ENTONCES"    {return symbolFactory.newSymbol("ENTONCES", ENTONCES);}
-  "FINSI"    {return symbolFactory.newSymbol("FINSI", FINSI);}
-  "MIENTRAS"    {return symbolFactory.newSymbol("MIENTRAS", MIENTRAS);}
-  "FINMIENTRAS"    {return symbolFactory.newSymbol("FINMIENTRAS", FINMIENTRAS);}
-  
-  //VARIABLES
-  
-  "BOOLEANO" {return symbolFactory.newSymbol("BOOLEANO", BOOLEANO);}
-  "REAL"	{return symbolFactory.newSymbol("REAL", REAL);}
-  "TRUE"	{return symbolFactory.newSymbol("TRUE", TRUE);}
-  "FALSO"   {return symbolFactory.newSymbol("FALSO", FALSO);}
-//{ident} {
-								// Simbolo s;
-								 //if ((s = tabla.buscar(yytext())) == null)
-								//s = tabla.insertar(yytext()); return new Symbol(sym.ID, s); }
- 
- //"MEM"      {return symbolFactory.newSymbol("MEM", MEM);}
+ "MEM"      {return symbolFactory.newSymbol("MEM", MEM);}
  "INF"		{ return symbolFactory.newSymbol("NUMBER", NUMBER, Double.POSITIVE_INFINITY); }
   {Entero}     {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
   {Real} {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
