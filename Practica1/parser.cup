@@ -9,6 +9,7 @@ import java_cup.runtime.*;
 import cup.example.Lexer;
 import java.io.IOException;
 import java.io.File;
+import java.io.*;
 import java.io.FileInputStream;
 
 parser code {:
@@ -47,7 +48,7 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PLUS, MINUS, TIMES,DIV, LPAREN, RPAREN, EXP, LOG, SIN, COS, IGUAL, MEM;
+terminal            SEMI, PLUS, MINUS, TIMES,DIV, LPAREN, RPAREN, COMA, EXP, LOG, SIN, COS, IGUAL, MEM;
 terminal MENORIGUAL, MAYORIGUAL, IGUALIGUAL, MENOR, MAYOR;
 terminal AND, OR, NOT;
 terminal SI, SINO, ENTONCES, FINSI, MIENTRAS, FINMIENTRAS;
@@ -58,101 +59,40 @@ terminal Double NUMBER; //Cambiamos a double los numeros
 
 /* Non terminals */
 non terminal            expr_list,asignacion;
+non terminal S, T, A, D, L, C, O, B, V, Q, QUNO, E, V, SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
-non terminal Double expr_uno, expr_dos, expr_tres, signo; //Cambiamos a double los resultados
+non terminal  expr_uno, expr_dos, expr_tres, signo; //Cambiamos a double los resultados
 
 /* Precedences */
 
 
 /* The grammar rules */
-expr_list ::= expr_list expr_uno:e SEMI         {: 
-switch(Double.toString(e)){
-	default:
-			System.out.println(e);
-			break;
-	case "Infinity":
-			System.out.println("INF");
-			break;
-	case "-Infinity":
-			System.out.println("-INF");
-			break;
-	case "NaN":
-			System.out.println("UNK");
-			break;
-		}:}
-		
-		
-            | expr_uno:e SEMI                   {: 
-switch(Double.toString(e)){
-	default:
-			System.out.println(e);
-			break;
-	case "Infinity":
-			System.out.println("INF");
-			break;
-	case "-Infinity":
-			System.out.println("-INF");
-			break;
-	case "NaN":
-			System.out.println("UNK");
-			break; 
-}:} 
+/*Axioma */
+S::= S T | T | S A | A | S D | D | S L | L | S C | C ;
 
-			| expr_list asignacion:e SEMI	{:
-				switch(Double.toString(MEM)){
-					default:
-						System.out.println("MEM = " + e);
-						break;
-					case "Infinity":
-						System.out.println("MEM = INF");
-						break;
-					case "-Infinity":
-						System.out.println("MEM = -INF");
-						break;
-					case "NaN":
-						System.out.println("MEM = UNK");
-						break; 
-			}:}
-			| asignacion:e SEMI	{:
-				switch(Double.toString(MEM)){
-					default:
-						System.out.println("MEM = " + e);
-						break;
-					case "Infinity":
-						System.out.println("MEM = INF");
-						break;
-					case "-Infinity":
-						System.out.println("MEM = -INF");
-						break;
-					case "NaN":
-						System.out.println("MEM = UNK");
-						break; 
-			}:}
-            ;
+/* Bucle*/
+L::= MIENTRAS O S FINMIENTRAS;
 
-asignacion 	::= MEM IGUAL expr_uno:e1 {: RESULT = e1; MEM = e1;:}
-			;
-expr_uno      ::= expr_uno:e1 PLUS  expr_dos:e2         {: RESULT = e1+e2;        :}
-             | expr_uno:e1 MINUS expr_dos:e2        {: RESULT = e1-e2;        :}
-             | expr_dos:e1  						{: RESULT= e1; :}  
-        
-             ;
-expr_dos ::= expr_dos:e1 TIMES expr_tres:e2        	{: RESULT = e1*e2;        :}
-             | expr_dos:e1  DIV expr_tres:e2        {: RESULT = e1/e2;        :} //A�adimos la regla de la division 
-			 | expr_tres:e1 				{: RESULT= e1; :}
-			;
-			
-expr_tres ::= 	signo:s LPAREN expr_uno:e RPAREN	         {: RESULT = s*e;           :}
-             | signo:s NUMBER:n	                     {: RESULT = s*n;           :}
-             | MEM  								{: RESULT=MEM ;:}
-             | SIN LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.sin(e1);  :} //Seno
-			 | COS LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.cos(e1);  :} //Coseno
-			 | EXP LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.exp(e1);  :} //Exponente
-			 | LOG LPAREN expr_uno:e1 RPAREN        {: RESULT = Math.log(e1);  :} //Logaritmo
-             ;
-             
-signo ::=    MINUS      {: RESULT = -1.0;           :}
+/* Condicional*/
+C::= SI O ENTONCES S FINSI | SI O ENTONCES S SINO S FINSI;
+/* Es posible que las prioridades de and or y not esten mal y haya que restructurar la gramatica
+	ver si podemos poner V o dejamos id
+*/
+O::= V MAYORIGUAL V | V MENORIGUAL V | V IGUALIGUAL V | V MAYOR V | V MENOR V | O AND O | O OR O | NOT O | ID:id;
+/* Declaraciones*/
+D::= REAL Q | BOOLEANO Q;
+Q::=ID | QUNO;
+QUNO::= /* LAMBDA */ | COMA Q;
+
+/* Asignaciones*/
+A::=ID IGUAL T | ID IGUAL O;
+
+/* Sumas y restas*/
+T::= T PLUS E| T MINUS E | E;
+E::=E TIMES V | E DIV V | V;
+V::= SIG LPAREN T RPAREN | SIG NUMBER | ID;
+SIG ::=    MINUS      {: RESULT = -1.0;           :}
 			| /* Nada*/ {: RESULT = 1.0;           :}
 			|PLUS {: RESULT = 1.0;           :}
-			;	
-       
+			;
+      

@@ -9,6 +9,7 @@ import java_cup.runtime.*;
 import cup.example.Lexer;
 import java.io.IOException;
 import java.io.File;
+import java.io.*;
 import java.io.FileInputStream;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.XMLElement;

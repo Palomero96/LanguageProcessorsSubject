@@ -24,9 +24,9 @@ import java_cup.runtime.*;
 %char
 %{
 	private TablaSimbolos tabla;
- public void Yylex(Reader in, TablaSimbolos t){
- this(in);
- this.tabla = t;
+ public void Yylex(java.io.Reader in, TablaSimbolos t){this(in);
+ 				
+ 				this.tabla = t;
  }
 
     public Lexer(ComplexSymbolFactory sf, java.io.InputStream is){
@@ -116,6 +116,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
  "exp"    	{ return symbolFactory.newSymbol("EXP", EXP); }
  "log"    	{ return symbolFactory.newSymbol("LOG", LOG); }
  "="        {return symbolFactory.newSymbol("IGUAL", IGUAL);}
+ ","          { return symbolFactory.newSymbol("COMA", COMA); }
  //COMPARADORES
  "<="       {return symbolFactory.newSymbol("MENORIGUAL", MENORIGUAL);}
  ">="       {return symbolFactory.newSymbol("MAYORIGUAL", MAYORIGUAL);}
