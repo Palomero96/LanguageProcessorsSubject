@@ -23,7 +23,8 @@ import java_cup.runtime.*;
 %cup
 %char
 %{
-	private TablaSimbolos tabla;
+static TablaSimbolos tabla = new TablaSimbolos();
+
  public Lexer(java.io.Reader in, TablaSimbolos t){
  				this(in);
  				this.tabla = t;
@@ -86,8 +87,8 @@ EndOfLineComment = "//" [^\r\n]* {Newline}
 CommentContent = ( [^*] | \*+[^*/] )*
 
 /* Identificadores*/
-Identificador = [a-zA-Z][a-zA-Z0-9]* 
-
+ID = [a-zA-Z][a-zA-Z0-9]* 
+//ID=[:jletter:][:jletterdigit:]*
 
 ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 
@@ -141,10 +142,11 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "REAL"	{return symbolFactory.newSymbol("REAL", REAL);}
   "TRUE"	{return symbolFactory.newSymbol("TRUE", TRUE);}
   "FALSO"   {return symbolFactory.newSymbol("FALSO", FALSO);}
-{ident} {
-								 Simbolo s;
-								 if ((s = tabla.buscar(yytext())) == null)
-								s = tabla.insertar(yytext()); return new Symbol(sym.ID, s); }
+{ID} {							 Simbolo s=null;
+								 if ((s = tabla.buscar(yytext())) == null){
+								 		s = tabla.insertar(yytext());
+								 }
+								  return new Symbol(sym.ID, s); }
  
  //"MEM"      {return symbolFactory.newSymbol("MEM", MEM);}
  "INF"		{ return symbolFactory.newSymbol("NUMBER", NUMBER, Double.POSITIVE_INFINITY); }

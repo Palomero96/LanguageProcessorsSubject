@@ -59,7 +59,8 @@ terminal Double NUMBER; //Cambiamos a double los numeros
 
 /* Non terminals */
 non terminal            expr_list,asignacion;
-non terminal S, T, A, D, L, C, O, V, Q, QUNO, E, V, SIG;
+
+non terminal S, T, A, D, L, C, O, Q, QUNO, E, V, SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
 non terminal  expr_uno, expr_dos, expr_tres, signo; //Cambiamos a double los resultados
 

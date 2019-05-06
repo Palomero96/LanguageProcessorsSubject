@@ -20,6 +20,7 @@ try {
  }
  // Creamos el objeto scanner
 Lexer scanner = new Lexer(f,fis);
+
 ArrayList<Symbol> symbols = new ArrayList<Symbol>();
 // Mientras no alcancemos el fin de la entrada
 boolean end = false;
