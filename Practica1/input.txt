@@ -1,5 +1,0 @@
-%Comentario
-  FINSI;
-  REAL vari;
-  BOOLEANO rar;
-  
