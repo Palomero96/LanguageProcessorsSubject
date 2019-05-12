@@ -135,10 +135,10 @@ ID = [a-zA-Z][a-zA-Z0-9]*
  
  //"MEM"      {return symbolFactory.newSymbol("MEM", MEM);}
  "INF"		{ return symbolFactory.newSymbol("NUMBER", NUMBER, Double.POSITIVE_INFINITY); }
-  {Entero}     {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
-  {Real} {return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
-  {Real1} { return symbolFactory.newSymbol("NUMBER", NUMBER, Double.parseDouble(yytext())); }
-  {Real2} { return symbolFactory.newSymbol("NUMBER", NUMBER, MetodosAuxiliares.Octalconverter(yytext()));}
+  {Entero}     {return symbolFactory.newSymbol("NUMBER", NUMBER, String.valueOf(Double.parseDouble(yytext()))); }
+  {Real} {return symbolFactory.newSymbol("NUMBER", NUMBER, String.valueOf(Double.parseDouble(yytext()))); }
+  {Real1} { return symbolFactory.newSymbol("NUMBER", NUMBER, String.valueOf(Double.parseDouble(yytext()))); }
+  {Real2} { return symbolFactory.newSymbol("NUMBER", NUMBER, String.valueOf(MetodosAuxiliares.Octalconverter(yytext())));}
 }
 
 

@@ -1,43 +1,39 @@
-<project name="MyProject" default="compile" basedir=".">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project basedir="." default="compile" name="MyProject">
 
-	  <property name="java"     location="src"       />
-	  <property name="classes"  location="bin/cls"   />
-	  <property name="result"   location="bin/jar"   />
-	  <property name="lib"      location="lib"       />
-	  <property name="tools"    location="tools"     />
-	  <property name="base"    location="."     />
+	  <property location="src" name="java"/>
+	  <property location="bin/cls" name="classes"/>
+	  <property location="bin/jar" name="result"/>
+	  <property location="lib" name="lib"/>
+	  <property location="tools" name="tools"/>
+	  <property location="." name="base"/>
 
-	  <taskdef name="jflex" classname="JFlex.anttask.JFlexTask"  classpath="${tools}/JFlex.jar"   />
-	  <taskdef name="cup"   classname="java_cup.anttask.CUPTask" classpath="${tools}/java-cup-11b.jar"  />
+	  <taskdef classname="JFlex.anttask.JFlexTask" classpath="${tools}/JFlex.jar" name="jflex"/>
+	  <taskdef classname="java_cup.anttask.CUPTask" classpath="${tools}/java-cup-11b.jar" name="cup"/>
 
 	  <target name="generate">
 	    
-	    <cup srcfile="${base}/parser.cup"  destdir="${java}"
-	          parser="Parser"
-			  interface="true"
-	  	      locations="true"
-	          debugsymbols="true" />
-	  	<jflex  file="lexer.jflex" destdir="${java}" />
+	    <cup debugsymbols="true" destdir="${java}" expect="0" interface="true" locations="true" parser="Parser" srcfile="${base}/parser.cup"/>
+	  	<jflex destdir="${java}" file="lexer.jflex"/>
 	  </target>
 
 	  <path id="libraries">
-	  	<files includes="${tools}/java-cup-11b-runtime.jar" />
+	  	<files includes="${tools}/java-cup-11b-runtime.jar"/>
 	  </path>
 
-	  <target name="compile" depends="generate">
+	  <target depends="generate" name="compile">
 	  	<mkdir dir="${classes}"/>
 	  	<mkdir dir="${result}"/>
 
-	    <javac includeantruntime="false" srcdir="${java}" destdir="${classes}">
-	    	<classpath refid="libraries" />
+	    <javac destdir="${classes}" includeantruntime="false" srcdir="${java}">
+	    	<classpath refid="libraries"/>
 	    </javac>
 	  </target>
 
 	  <target name="clean">
-	    <delete file="${java}/Parser.java" />
-	    <delete file="${java}/sym.java" />
-	    <delete file="${java}/Scanner.java" />
-	    <delete dir="${classes}" />
-	    <delete dir="${result}" />
+	    <delete file="${java}/Parser.java"/>
+	    <delete file="${java}/sym.java"/>
+	    <delete file="${java}/Scanner.java"/>
+	    <delete dir="${classes}"/>
+	    <delete dir="${result}"/>
 	  </target>
 </project>

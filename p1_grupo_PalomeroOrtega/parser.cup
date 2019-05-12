@@ -31,57 +31,61 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal     SEMI, PLUS, MINUS, TIMES,DIV, LPAREN, RPAREN, EXP, LOG, SIN, COS, IGUAL, COMA, UMINUS;
+terminal     SEMI, PLUS, MINUS, TIMES,DIV, LPAREN, RPAREN, IGUAL, COMA, UMINUS;
 terminal MENORIGUAL, MAYORIGUAL, IGUALIGUAL, MENOR, MAYOR;
 terminal AND, OR, NOT;
 terminal SI, SINO, ENTONCES, FINSI, MIENTRAS, FINMIENTRAS;
 terminal BOOLEANO, REAL, TRUE, FALSO;
-terminal Integer NUMBER; //Cambiamos a double los numeros
+terminal String NUMBER; //Cambiamos a double los numeros
  terminal Simbolo ID;
 
 
 /* Non terminals */
 non terminal            expr_list,asignacion;
 
-non terminal S, T, A, D, L, C, O, Q, QUNO, E, V, SIG;
+non terminal S, A, D, L,T, C, Q,SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
 non terminal  expr_uno, expr_dos, expr_tres, signo; //Cambiamos a double los resultados
-non terminal Integer    expr;      // used to store evaluated subexpressions
+non terminal String E;      // used to store evaluated subexpressions
 
 /* Precedences */
+precedence left AND, OR;
+precedence left NOT;	
+precedence nonassoc MAYOR, MENOR, IGUALIGUAL, MAYORIGUAL, MENORIGUAL;
 precedence left PLUS, MINUS;
-precedence left TIMES;
+precedence left TIMES, DIV;
 precedence left UMINUS;
 
 /* The grammar rules */
 
  /*Axioma */
-S::= S T | T | S A | A | S D | D | S L | L | S C | C ;
+S::= S E SEMI| E SEMI ;// revisar si esta bien lo de el SEMI
+
+/* Sentencias*/
+E::= A | D | T | L | C;
 
 /* Bucle*/
-L::= MIENTRAS O S FINMIENTRAS;
+L::= MIENTRAS T S FINMIENTRAS;
 
 /* Condicional*/
-C::= SI O ENTONCES S FINSI | SI O ENTONCES S SINO S FINSI;
-/* Es posible que las prioridades de and or y not esten mal y haya que restructurar la gramatica
-	ver si podemos poner V o dejamos id
-*/
-O::= V MAYORIGUAL V | V MENORIGUAL V | V IGUALIGUAL V | V MAYOR V | V MENOR V | O AND O | O OR O | NOT O | V;
+C::= SI T ENTONCES S FINSI | SI T ENTONCES S SINO S FINSI;
+
 /* Declaraciones*/
-D::= REAL Q | BOOLEANO Q;
-Q::=ID | QUNO;
-QUNO::= /* LAMBDA */ | COMA Q ;
+D::= REAL ID Q | BOOLEANO ID Q;
+Q::= /* LAMBDA */ |  COMA ID Q ;
 
 /* Asignaciones*/
-A::=ID IGUAL T | ID IGUAL O;
+A::=ID IGUAL T ;
 
-/* Sumas y restas*/
-T::= T PLUS E| T MINUS E | E;
-E::=E TIMES V | E DIV V | V;
-V::= SIG LPAREN T RPAREN | SIG NUMBER | ID;
+/* Operadores */
+T::= T PLUS T| T MINUS T | T TIMES T | T DIV T | T MAYORIGUAL T | T MENORIGUAL T | T IGUALIGUAL T | T MAYOR T |
+ T MENOR T | T AND T | T OR T | NOT T |  NUMBER | ID | TRUE | FALSO | SIG T |   LPAREN T RPAREN;
+/* Signo */
 SIG ::=    MINUS      {: RESULT = -1.0;           :}
-			| /* Nada*/ {: RESULT = 1.0;           :}
+		 	%prec UMINUS
 			|PLUS {: RESULT = 1.0;           :}
-			;            
+			;
+   
+			         
              
        

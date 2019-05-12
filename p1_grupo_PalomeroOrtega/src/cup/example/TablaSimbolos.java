@@ -8,7 +8,7 @@ public TablaSimbolos(){
 t = new HashMap();
 }
 public Simbolo insertar(String nombre){
-Simbolo s = new Simbolo(nombre, new Integer(0));
+Simbolo s = new Simbolo(nombre,null, null);
 t.put(nombre, s);
 return s;
 }
