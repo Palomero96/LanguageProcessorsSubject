@@ -10,11 +10,143 @@ import cup.example.Lexer;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList; 
 
 parser code {:
   protected Lexer lexer;
-:}
+static TablaSimbolos tabla = new TablaSimbolos();
 
+:}
+action code {:
+
+ArrayList<String> Resultados = new ArrayList<String>(); //Para almacenar los resultados del string
+int linea=1;
+int tmp=0;
+private String newTmp(){
+String aux= "tmp"+tmp;
+tmp++;
+return aux;
+}
+/* Metodo para buscar el Resultado en el array*/
+private String buscarResultado(String aux){
+String auxuno = aux.substring(3);
+int indice = Integer.parseInt(auxuno);
+return Resultados.get(indice);
+}
+/* Metodo para obtener el Resultado para comprobar el tipo*/
+private String ObtenerResultado(String s){
+String resultado;
+if(s.contains("tmp")){
+		resultado=buscarResultado(s);
+		}else{
+			resultado=s;
+		}
+return resultado;
+}
+/* Metodo para realizar las operaciones aritmeticas basicas y generar el cuarteto correspondiente*/
+private String operacion(String t1, String t2, String op){
+boolean uno=false;	
+String auxiliar="";
+try {		String resultadoUno=ObtenerResultado(t1);
+			String resultadoDos=ObtenerResultado(t2);
+			Double unod=Double.parseDouble(resultadoUno);
+			uno=true;
+			Double dos=Double.parseDouble(resultadoDos);
+			auxiliar= newTmp();
+			generarCuarteto("("+op+","+t1+","+ t2+","+auxiliar+")");
+			switch (op){
+				case "+":
+						Resultados.add(String.valueOf(unod+dos));
+						break;
+				case "-":
+						Resultados.add(String.valueOf(unod-dos));
+						break;
+				case "*":
+						Resultados.add(String.valueOf(unod*dos));
+						break;
+				case "/":	
+						Resultados.add(String.valueOf(unod/dos));
+						break;
+			}
+			
+        } catch (NumberFormatException e) {
+			if(uno){ System.out.println("El segundo operando no es un numero");
+		}else{
+            System.out.println("El primer operando no es un numero");
+			}
+        }
+return auxiliar;
+}
+private String comparacion(String t1, String t2, String op){
+boolean uno=false;	
+String auxiliar="";
+String resultado="";
+try {		String resultadoUno=ObtenerResultado(t1);
+			String resultadoDos=ObtenerResultado(t2);
+			Double unod=Double.parseDouble(resultadoUno);
+			uno=true;
+			Double dos=Double.parseDouble(resultadoDos);
+			auxiliar= newTmp();
+			generarCuarteto("("+op+","+t1+","+ t2+","+auxiliar+")");
+			switch (op){
+				case "<=":
+						if(unod<=dos){
+						resultado="True";
+						}else{
+						resultado="False";
+						}
+						Resultados.add(resultado);
+						break;
+				case ">=":
+						if(unod>=dos){
+						resultado="True";
+						}else{
+						resultado="False";
+						}
+						Resultados.add(resultado);
+						break;
+				case "==":
+						if(unod==dos){
+						resultado="True";
+						}else{
+						resultado="False";
+						}
+						Resultados.add(resultado);
+						break;
+				case "<":	
+						if(unod<dos){
+						resultado="True";
+						}else{
+						resultado="False";
+						}
+						Resultados.add(resultado);
+						break;
+				case ">":	
+						if(unod>dos){
+						resultado="True";
+						}else{
+						resultado="False";
+						}
+						Resultados.add(resultado);
+						break;
+			}
+		System.out.println(resultado);
+			
+        } catch (NumberFormatException e) {
+			if(uno){ System.out.println("El segundo operando no es un numero");
+		}else{
+            System.out.println("El primer operando no es un numero");
+			}
+        }
+return auxiliar;
+
+}
+
+private void generarCuarteto(String cuarteto){
+System.out.println(linea+" "+ cuarteto);
+linea++;
+}
+:}
 /* define how to connect to the scanner! */
 init with {:
   ComplexSymbolFactory f = new ComplexSymbolFactory();
@@ -37,15 +169,14 @@ terminal AND, OR, NOT;
 terminal SI, SINO, ENTONCES, FINSI, MIENTRAS, FINMIENTRAS;
 terminal BOOLEANO, REAL, TRUE, FALSO;
 terminal String NUMBER; //Cambiamos a double los numeros
- terminal Simbolo ID;
+ terminal String ID;
 
 
 /* Non terminals */
 
-non terminal S, A, D, L,T, C,B, Q,SIG;
+non terminal S, A, D, L,E, C,B, Q,SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
-non terminal  expr_uno, expr_dos, expr_tres, signo; //Cambiamos a double los resultados
-non terminal String E;      // used to store evaluated subexpressions
+non terminal String T;      // used to store evaluated subexpressions
 
 /* Precedences */
 precedence left AND, OR;
@@ -61,7 +192,8 @@ precedence left UMINUS;
 S::= S E SEMI| E SEMI ;// revisar si esta bien lo de el SEMI
 
 /* Sentencias*/
-E::= A | D | T:t {: System.out.println(t);           :} 
+E::= A | D | T:t {: //System.out.println(t);System.out.println(ObtenerResultado(t));
+					           :} 
 | L | C;
 
 /* Bucle*/
@@ -71,16 +203,134 @@ L::= MIENTRAS T S FINMIENTRAS;
 C::= SI T ENTONCES S FINSI | SI T ENTONCES S SINO S FINSI;
 
 /* Declaraciones*/
-D::= REAL ID Q | BOOLEANO ID B;
-Q::= /* LAMBDA */ |  COMA ID Q ;
-B::= /* LAMBDA */ |  COMA ID B ;
+D::= REAL ID:s Q {: 
+			if(tabla.buscar(s)==null){
+			tabla.insertar(s,"REAL","0.0");
+			System.out.println("Se ha declarado la variable REAL: "+ s);
+			}else{
+			System.out.println("La siguiente variable REAL ya ha sido declarada:"+ s);
+}
+				
+           :}
+
+ | BOOLEANO ID:s B {: 
+			if(tabla.buscar(s)==null){
+			tabla.insertar(s,"BOOLEANO","False");
+			System.out.println("Se ha declarado la variable BOOLEANO: "+ s);
+			}else{
+			System.out.println("La siguiente variable BOOLEANO ya ha sido declarada:"+ s);
+}
+				
+           :};
+Q::= /* LAMBDA */ |  COMA ID:s Q {:
+if(tabla.buscar(s)==null){
+			tabla.insertar(s,"REAL","0.0");
+			System.out.println("Se ha declarado la variable REAL: "+ s);
+			}else{
+			System.out.println("La siguiente variable REAL ya ha sido declarada:"+ s);
+}
+:};
+B::= /* LAMBDA */ |  COMA ID:s B {: 
+			if(tabla.buscar(s)==null){
+			tabla.insertar(s,"BOOLEANO","False");
+			System.out.println("Se ha declarado la variable BOOLEANO: "+ s);
+			}else{
+			System.out.println("La siguiente variable BOOLEANO ya ha sido declarada:"+ s);
+}
+				
+           :};
 
 /* Asignaciones*/
-A::=ID IGUAL T ;
+A::=ID:id IGUAL T:s {:
+	//Hay que comprobar si existe la varible
+	Simbolo simbolo = tabla.buscar(id);
+	if(tabla.buscar(id)==null){
+		System.out.println("La variable (" +id+ ") no ha sido declarada");
+}else{ //en el caso de que exista tendremos que comprobar los tipos
+
+	if(simbolo.tipo=="BOOLEANO"){         //Si es Booleano
+		if(s=="True" || s=="False" || s.contains("tmp")){
+		if(s.contains("tmp")){
+				
+				String bol=buscarResultado(s);
+				if(bol=="True" || bol=="False"){
+					simbolo.valor=bol;
+					}else{
+						System.out.println("El valor tiene un tipo diferente a la variable "+simbolo.tipo);
+					}
+			}else{
+			simbolo.valor=s;
+}
+			tabla.replace(simbolo.nombre, simbolo);
+			generarCuarteto("(=,"+s+", ,"+id+")");
+		}else{
+			System.out.println("La variable tiene un tipo diferente al valor que se le quiere asignar");
+		}		
+	}
+}
+	if(simbolo.tipo=="REAL"){  //Si es Real
+	try {
+			if(s.contains("tmp")){
+				Double.parseDouble(buscarResultado(s));
+				simbolo.valor=buscarResultado(s);
+			}else{
+				Double.parseDouble(s);
+				simbolo.valor=s;
+}
+			tabla.replace(simbolo.nombre, simbolo);
+			generarCuarteto("(=,"+s+", ,"+id+")");
+        } catch (NumberFormatException e) {
+            System.out.println("La variable tiene un tipo diferente al valor que se le quiere asignar");
+        }
+	}
+
+
+:};
 
 /* Operadores */
-T::= T PLUS T| T MINUS T | T TIMES T | T DIV T | T MAYORIGUAL T | T MENORIGUAL T | T IGUALIGUAL T | T MAYOR T |
- T MENOR T | T AND T | T OR T | NOT T |  NUMBER | ID | TRUE | FALSO | SIG T |   LPAREN T RPAREN;
+T::= T:t1 PLUS T:t2 {: 
+RESULT=operacion(t1,t2,"+");
+:}			
+| T:t1 MINUS T:t2 {: 
+RESULT=operacion(t1,t2,"-");
+:}
+| T:t1 TIMES T:t2 {: 
+RESULT=operacion(t1,t2,"*");
+:}
+| T:t1 DIV T:t2 {: 
+RESULT=operacion(t1,t2,"/");
+
+:}
+| T:t1 MAYORIGUAL T:t2 {: 
+RESULT=comparacion(t1,t2,">=");
+
+:}
+
+ | T:t1 MENORIGUAL T:t2 {: 
+RESULT=comparacion(t1,t2,"<=");
+
+:}
+| T:t1 IGUALIGUAL T:t2 
+{: 
+RESULT=comparacion(t1,t2,"==");
+
+:}
+| T:t1 MAYOR T:t2 {: 
+RESULT=comparacion(t1,t2,">");
+
+:}
+|T:t1 MENOR T:t2 {: 
+RESULT=comparacion(t1,t2,"<");
+
+:}
+| T:t1 AND T:t2 | T:t1 OR T:t2 | NOT T:t1
+  |  NUMBER:n {: RESULT = n;           :}
+  | ID:id {:
+
+:}
+  | TRUE {: RESULT = "True";           :}
+  | FALSO {: RESULT = "False";           :}
+  | SIG T |   LPAREN T RPAREN;
 /* Signo */
 SIG ::=    MINUS      {: RESULT = -1.0;           :}
 		 	%prec UMINUS

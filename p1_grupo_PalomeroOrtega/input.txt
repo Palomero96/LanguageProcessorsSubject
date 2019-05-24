@@ -1,6 +1,13 @@
 % Probamos todos los tokens para ver si los detecta bien
   
-  REAL vari, vari; % Solo crea una variable
-   REAL varible;
+  REAL vari, varid; % Solo crea una variable
+  REAL vari;
   BOOLEANO rar;
-  == = AND OR NOT SI SINO ENTONCES FINSI MIENTRAS FINMIENTRAS <= >= == < > BOOLEANO TRUE FALSO REAL ;
+  rar=True;
+ vari = 3+2-1;
+ 3/2;
+ 5+2;
+ 4*2;
+ 4-2;
+ 4>2;
+ 

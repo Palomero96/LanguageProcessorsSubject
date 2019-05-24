@@ -17,13 +17,6 @@ import java.io.InputStreamReader;
 %char
 %{
 	
-static TablaSimbolos tabla = new TablaSimbolos();
-
- public Lexer(java.io.Reader in, TablaSimbolos t){
- 				this(in);
- 				this.tabla = t;
- }
-
     public Lexer(ComplexSymbolFactory sf, java.io.InputStream is){
 		this(is);
         symbolFactory = sf;
@@ -97,6 +90,7 @@ ID = [a-zA-Z][a-zA-Z0-9]*
   "+"          { return symbolFactory.newSymbol("PLUS", PLUS); }
   "-"          { return symbolFactory.newSymbol("MINUS", MINUS); }
   "*"          { return symbolFactory.newSymbol("TIMES", TIMES); }
+   "/"          { return symbolFactory.newSymbol("DIV", DIV); }
   "n"          { return symbolFactory.newSymbol("UMINUS", UMINUS); }
   "("          { return symbolFactory.newSymbol("LPAREN", LPAREN); }
   ")"          { return symbolFactory.newSymbol("RPAREN", RPAREN); }
@@ -125,13 +119,9 @@ ID = [a-zA-Z][a-zA-Z0-9]*
   
   "BOOLEANO" {return symbolFactory.newSymbol("BOOLEANO", BOOLEANO);}
   "REAL"	{return symbolFactory.newSymbol("REAL", REAL);}
-  "TRUE"	{return symbolFactory.newSymbol("TRUE", TRUE);}
-  "FALSO"   {return symbolFactory.newSymbol("FALSO", FALSO);}
-{ID} {							 Simbolo s=null;
-								 if ((s = tabla.buscar(yytext())) == null){
-								 		s = tabla.insertar(yytext());
-								 }
-								  return new Symbol(sym.ID, s); }
+  "True"	{return symbolFactory.newSymbol("TRUE", TRUE);}
+  "False"   {return symbolFactory.newSymbol("FALSO", FALSO);}
+{ID} {		  return symbolFactory.newSymbol("ID", ID, String.valueOf(yytext()));}
  
  //"MEM"      {return symbolFactory.newSymbol("MEM", MEM);}
  "INF"		{ return symbolFactory.newSymbol("NUMBER", NUMBER, Double.POSITIVE_INFINITY); }
