@@ -3,7 +3,7 @@ import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.Symbol;
 import java.lang.*;
-import java.io.InputStreamReader;
+import java.io.*;
 
 %%
 
@@ -19,19 +19,21 @@ import java.io.InputStreamReader;
 	
 static TablaSimbolos tabla = new TablaSimbolos();
 
- public Lexer(java.io.Reader in, TablaSimbolos t){
+ public Lexer(ComplexSymbolFactory sf, Reader in, TablaSimbolos t){
+ 				
  				this(in);
+ 				symbolFactory = sf;
  				this.tabla = t;
  }
 
-    public Lexer(ComplexSymbolFactory sf, java.io.InputStream is){
+  /*  public Lexer(ComplexSymbolFactory sf, java.io.InputStream is){
 		this(is);
         symbolFactory = sf;
     }
 	public Lexer(ComplexSymbolFactory sf, java.io.Reader reader){
 		this(reader);
         symbolFactory = sf;
-    }
+    }*/
     
     private StringBuffer sb;
     private ComplexSymbolFactory symbolFactory;

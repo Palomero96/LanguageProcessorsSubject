@@ -9,8 +9,8 @@ public static void main(String[] args) throws Exception {
 //Parser parser = new Parser();
 //parser.parse();
 // Entrada de datos: teclado por defecto, fichero si hay argumento
-InputStream dataStream = System.in;
 ComplexSymbolFactory f = new ComplexSymbolFactory();
+TablaSimbolos tabla = new TablaSimbolos();
 File file = new File("input.txt");
 FileInputStream fis = null;
 try {
@@ -19,7 +19,7 @@ try {
  e.printStackTrace();
  }
  // Creamos el objeto scanner
-Lexer scanner = new Lexer(f,fis);
+Lexer scanner = new Lexer(f, new InputStreamReader(fis) ,tabla);
 
 ArrayList<Symbol> symbols = new ArrayList<Symbol>();
 // Mientras no alcancemos el fin de la entrada

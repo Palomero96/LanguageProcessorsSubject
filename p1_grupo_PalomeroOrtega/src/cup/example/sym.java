@@ -8,42 +8,38 @@ package cup.example;
 /** CUP generated interface containing symbol constants. */
 public interface sym {
   /* terminals */
-  public static final int UMINUS = 15;
-  public static final int SI = 24;
-  public static final int LPAREN = 7;
-  public static final int SEMI = 2;
-  public static final int ENTONCES = 26;
-  public static final int MINUS = 4;
-  public static final int RPAREN = 8;
-  public static final int NOT = 23;
-  public static final int MENORIGUAL = 16;
-  public static final int AND = 21;
-  public static final int IGUAL = 13;
-  public static final int FINMIENTRAS = 29;
-  public static final int SINO = 25;
-  public static final int OR = 22;
-  public static final int MIENTRAS = 28;
-  public static final int DIV = 6;
-  public static final int PLUS = 3;
-  public static final int EXP = 9;
-  public static final int ID = 35;
-  public static final int MAYORIGUAL = 17;
-  public static final int EOF = 0;
-  public static final int TRUE = 32;
-  public static final int error = 1;
-  public static final int COMA = 14;
-  public static final int MENOR = 19;
-  public static final int NUMBER = 34;
-  public static final int COS = 12;
-  public static final int REAL = 31;
-  public static final int MAYOR = 20;
-  public static final int LOG = 10;
   public static final int TIMES = 5;
-  public static final int SIN = 11;
-  public static final int IGUALIGUAL = 18;
-  public static final int FALSO = 33;
-  public static final int BOOLEANO = 30;
-  public static final int FINSI = 27;
+  public static final int AND = 17;
+  public static final int IGUALIGUAL = 14;
+  public static final int MENOR = 15;
+  public static final int PLUS = 3;
+  public static final int OR = 18;
+  public static final int RPAREN = 8;
+  public static final int IGUAL = 9;
+  public static final int MENORIGUAL = 12;
+  public static final int SEMI = 2;
+  public static final int ENTONCES = 22;
+  public static final int NOT = 19;
+  public static final int TRUE = 28;
+  public static final int LPAREN = 7;
+  public static final int ID = 31;
+  public static final int BOOLEANO = 26;
+  public static final int FALSO = 29;
+  public static final int COMA = 10;
+  public static final int NUMBER = 30;
+  public static final int FINMIENTRAS = 25;
+  public static final int MAYOR = 16;
+  public static final int EOF = 0;
+  public static final int SINO = 21;
+  public static final int DIV = 6;
+  public static final int MAYORIGUAL = 13;
+  public static final int SI = 20;
+  public static final int MINUS = 4;
+  public static final int error = 1;
+  public static final int REAL = 27;
+  public static final int MIENTRAS = 24;
+  public static final int FINSI = 23;
+  public static final int UMINUS = 11;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -54,10 +50,6 @@ public interface sym {
   "DIV",
   "LPAREN",
   "RPAREN",
-  "EXP",
-  "LOG",
-  "SIN",
-  "COS",
   "IGUAL",
   "COMA",
   "UMINUS",
