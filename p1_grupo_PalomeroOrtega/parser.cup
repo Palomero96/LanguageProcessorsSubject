@@ -41,9 +41,8 @@ terminal String NUMBER; //Cambiamos a double los numeros
 
 
 /* Non terminals */
-non terminal            expr_list,asignacion;
 
-non terminal S, A, D, L,T, C, Q,SIG;
+non terminal S, A, D, L,T, C,B, Q,SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
 non terminal  expr_uno, expr_dos, expr_tres, signo; //Cambiamos a double los resultados
 non terminal String E;      // used to store evaluated subexpressions
@@ -62,7 +61,8 @@ precedence left UMINUS;
 S::= S E SEMI| E SEMI ;// revisar si esta bien lo de el SEMI
 
 /* Sentencias*/
-E::= A | D | T | L | C;
+E::= A | D | T:t {: System.out.println(t);           :} 
+| L | C;
 
 /* Bucle*/
 L::= MIENTRAS T S FINMIENTRAS;
@@ -71,8 +71,9 @@ L::= MIENTRAS T S FINMIENTRAS;
 C::= SI T ENTONCES S FINSI | SI T ENTONCES S SINO S FINSI;
 
 /* Declaraciones*/
-D::= REAL ID Q | BOOLEANO ID Q;
+D::= REAL ID Q | BOOLEANO ID B;
 Q::= /* LAMBDA */ |  COMA ID Q ;
+B::= /* LAMBDA */ |  COMA ID B ;
 
 /* Asignaciones*/
 A::=ID IGUAL T ;
