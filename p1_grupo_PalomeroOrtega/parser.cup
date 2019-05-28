@@ -129,9 +129,7 @@ try {		String resultadoUno=ObtenerResultado(t1);
 						}
 						Resultados.add(resultado);
 						break;
-			}
-		System.out.println(resultado);
-			
+			}		
         } catch (NumberFormatException e) {
 			if(uno){ System.out.println("El segundo operando no es un numero");
 		}else{
@@ -139,7 +137,76 @@ try {		String resultadoUno=ObtenerResultado(t1);
 			}
         }
 return auxiliar;
+}
 
+/* Metodo para realizar las operaciones aritmeticas basicas y generar el cuarteto correspondiente*/
+private String logicos(String t1, String t2, String op){	
+String auxiliar="";
+String ResultadoUno="";
+String ResultadoDos="";
+int correctos=0;
+String resultado="";
+//Comprobamos que t1 es un booleano
+	if(t1=="True" || t1=="False" || t1.contains("tmp")){
+		if(t1.contains("tmp")){
+				String bol=buscarResultado(t1);
+				
+				if(bol=="True" || bol=="False"){
+					ResultadoUno=bol;
+					correctos++;
+					}else{
+						System.out.println("El primer valor de la operacion no tiene el tipo adecuado");
+					}
+			}else{
+			ResultadoUno=t1;
+			correctos++;
+			}
+		}
+//Comprobamos que t2 es un booleano
+	if(t2=="True" || t2=="False" || t2.contains("tmp")){
+		if(t2.contains("tmp")){
+				String bol=buscarResultado(t2);
+				
+				if(bol=="True" || bol=="False"){
+					ResultadoDos=bol;
+					correctos++;
+					}else{
+						System.out.println("El segundo valor de la operacion no tiene el tipo adecuado");
+					}
+			}else{
+			ResultadoDos=t1;
+			correctos++;
+			}
+		}
+		if(correctos==2){
+			
+			auxiliar= newTmp();
+			generarCuarteto("("+op+","+t1+","+ t2+","+auxiliar+")");
+			
+			switch (op){
+				case "&":
+						if(ResultadoUno=="True" && ResultadoDos=="True"){
+						resultado="True";
+						}else{
+						resultado="False";
+						}
+						Resultados.add(resultado);
+						break;	
+
+				case "|":
+						if(ResultadoUno=="False" && ResultadoDos=="False"){
+						resultado="False";
+						}else{
+						resultado="True";
+						}
+						Resultados.add(resultado);
+						break;
+        }
+
+}else{
+	System.out.println("Alguna de las dos variables no tiene el tipo adecuado");
+}
+return auxiliar;
 }
 
 private void generarCuarteto(String cuarteto){
@@ -251,7 +318,6 @@ A::=ID:id IGUAL T:s {:
 	if(simbolo.tipo=="BOOLEANO"){         //Si es Booleano
 		if(s=="True" || s=="False" || s.contains("tmp")){
 		if(s.contains("tmp")){
-				
 				String bol=buscarResultado(s);
 				if(bol=="True" || bol=="False"){
 					simbolo.valor=bol;
@@ -303,38 +369,79 @@ RESULT=operacion(t1,t2,"/");
 :}
 | T:t1 MAYORIGUAL T:t2 {: 
 RESULT=comparacion(t1,t2,">=");
-
 :}
 
  | T:t1 MENORIGUAL T:t2 {: 
 RESULT=comparacion(t1,t2,"<=");
-
 :}
 | T:t1 IGUALIGUAL T:t2 
 {: 
 RESULT=comparacion(t1,t2,"==");
-
 :}
 | T:t1 MAYOR T:t2 {: 
 RESULT=comparacion(t1,t2,">");
-
 :}
 |T:t1 MENOR T:t2 {: 
 RESULT=comparacion(t1,t2,"<");
+:}
+| T:t1 AND T:t2 {: 
+RESULT=logicos(t1,t2,"&");
 
 :}
-| T:t1 AND T:t2 | T:t1 OR T:t2 | NOT T:t1
+| T:t1 OR T:t2 {: 
+RESULT=logicos(t1,t2,"|");
+
+:}
+ | NOT T:t1 {: 
+String auxiliar="";
+String ResultadoUno="";
+String resultado="";
+//Comprobamos que t1 es un booleano
+	if(t1=="True" || t1=="False" || t1.contains("tmp")){
+		if(t1.contains("tmp")){
+				String bol=buscarResultado(t1);
+				
+				if(bol=="True" || bol=="False"){
+					ResultadoUno=bol;
+					}else{
+						System.out.println("El primer valor de la operacion no tiene el tipo adecuado");
+					}
+			}else{
+			ResultadoUno=t1;
+			}
+		if(ResultadoUno=="True"){
+		resultado="False";
+		}else{
+		resultado="True";
+		}
+		auxiliar= newTmp();
+		//Utilizaremos el simbolo ! para indicar que se trata del operador logico NOT
+		generarCuarteto("(!,"+t1+", ,"+auxiliar+")");
+		Resultados.add(resultado);
+		}else{
+			System.out.println("El valor no es del tipo correcto");
+}
+RESULT=auxiliar;
+:}
   |  NUMBER:n {: RESULT = n;           :}
   | ID:id {:
-
+Simbolo simbolo = tabla.buscar(id);
+	if(tabla.buscar(id)==null){
+		System.out.println("La variable (" +id+ ") no ha sido declarada");
+}else{ 
+RESULT=simbolo.valor;
+}
 :}
   | TRUE {: RESULT = "True";           :}
   | FALSO {: RESULT = "False";           :}
-  | SIG T |   LPAREN T RPAREN;
+  | SIG:s T:t1 {: 
+System.out.println(s+t1);
+RESULT = s + t1;   :}
+  | LPAREN T:t1 RPAREN {: RESULT = t1;           :};
 /* Signo */
-SIG ::=    MINUS      {: RESULT = -1.0;           :}
+SIG ::=    MINUS      {: RESULT ="-";           :}
 		 	%prec UMINUS
-			|PLUS {: RESULT = 1.0;           :}
+			|PLUS {: RESULT = "";           :}
 			;
    
 			         

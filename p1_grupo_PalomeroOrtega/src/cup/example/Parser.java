@@ -436,9 +436,7 @@ try {		String resultadoUno=ObtenerResultado(t1);
 						}
 						Resultados.add(resultado);
 						break;
-			}
-		System.out.println(resultado);
-			
+			}		
         } catch (NumberFormatException e) {
 			if(uno){ System.out.println("El segundo operando no es un numero");
 		}else{
@@ -446,7 +444,76 @@ try {		String resultadoUno=ObtenerResultado(t1);
 			}
         }
 return auxiliar;
+}
 
+/* Metodo para realizar las operaciones aritmeticas basicas y generar el cuarteto correspondiente*/
+private String logicos(String t1, String t2, String op){	
+String auxiliar="";
+String ResultadoUno="";
+String ResultadoDos="";
+int correctos=0;
+String resultado="";
+//Comprobamos que t1 es un booleano
+	if(t1=="True" || t1=="False" || t1.contains("tmp")){
+		if(t1.contains("tmp")){
+				String bol=buscarResultado(t1);
+				
+				if(bol=="True" || bol=="False"){
+					ResultadoUno=bol;
+					correctos++;
+					}else{
+						System.out.println("El primer valor de la operacion no tiene el tipo adecuado");
+					}
+			}else{
+			ResultadoUno=t1;
+			correctos++;
+			}
+		}
+//Comprobamos que t2 es un booleano
+	if(t2=="True" || t2=="False" || t2.contains("tmp")){
+		if(t2.contains("tmp")){
+				String bol=buscarResultado(t2);
+				
+				if(bol=="True" || bol=="False"){
+					ResultadoDos=bol;
+					correctos++;
+					}else{
+						System.out.println("El segundo valor de la operacion no tiene el tipo adecuado");
+					}
+			}else{
+			ResultadoDos=t1;
+			correctos++;
+			}
+		}
+		if(correctos==2){
+			
+			auxiliar= newTmp();
+			generarCuarteto("("+op+","+t1+","+ t2+","+auxiliar+")");
+			
+			switch (op){
+				case "&":
+						if(ResultadoUno=="True" && ResultadoDos=="True"){
+						resultado="True";
+						}else{
+						resultado="False";
+						}
+						Resultados.add(resultado);
+						break;	
+
+				case "|":
+						if(ResultadoUno=="False" && ResultadoDos=="False"){
+						resultado="False";
+						}else{
+						resultado="True";
+						}
+						Resultados.add(resultado);
+						break;
+        }
+
+}else{
+	System.out.println("Alguna de las dos variables no tiene el tipo adecuado");
+}
+return auxiliar;
 }
 
 private void generarCuarteto(String cuarteto){
@@ -706,7 +773,6 @@ if(tabla.buscar(s)==null){
 	if(simbolo.tipo=="BOOLEANO"){         //Si es Booleano
 		if(s=="True" || s=="False" || s.contains("tmp")){
 		if(s.contains("tmp")){
-				
 				String bol=buscarResultado(s);
 				if(bol=="True" || bol=="False"){
 					simbolo.valor=bol;
@@ -832,7 +898,6 @@ RESULT=operacion(t1,t2,"/");
  
 RESULT=comparacion(t1,t2,">=");
 
-
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -850,7 +915,6 @@ RESULT=comparacion(t1,t2,">=");
 		//@@CUPDBG15
  
 RESULT=comparacion(t1,t2,"<=");
-
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -870,7 +934,6 @@ RESULT=comparacion(t1,t2,"<=");
  
 RESULT=comparacion(t1,t2,"==");
 
-
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -888,7 +951,6 @@ RESULT=comparacion(t1,t2,"==");
 		//@@CUPDBG17
  
 RESULT=comparacion(t1,t2,">");
-
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -908,7 +970,6 @@ RESULT=comparacion(t1,t2,">");
  
 RESULT=comparacion(t1,t2,"<");
 
-
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -923,6 +984,10 @@ RESULT=comparacion(t1,t2,"<");
 		Location t2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location t2xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		String t2 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG19
+ 
+RESULT=logicos(t1,t2,"&");
+
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -938,6 +1003,10 @@ RESULT=comparacion(t1,t2,"<");
 		Location t2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location t2xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		String t2 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG20
+ 
+RESULT=logicos(t1,t2,"|");
+
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -950,6 +1019,37 @@ RESULT=comparacion(t1,t2,"<");
 		Location t1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location t1xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		String t1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG21
+ 
+String auxiliar="";
+String ResultadoUno="";
+String resultado="";
+//Comprobamos que t1 es un booleano
+	if(t1=="True" || t1=="False" || t1.contains("tmp")){
+		if(t1.contains("tmp")){
+				String bol=buscarResultado(t1);
+				
+				if(bol=="True" || bol=="False"){
+					ResultadoUno=bol;
+					}else{
+						System.out.println("El primer valor de la operacion no tiene el tipo adecuado");
+					}
+			}else{
+			ResultadoUno=t1;
+			}
+		if(ResultadoUno=="True"){
+		resultado="False";
+		}else{
+		resultado="True";
+		}
+		auxiliar= newTmp();
+		//Utilizaremos el simbolo ! para indicar que se trata del operador logico NOT
+		generarCuarteto("(!,"+t1+", ,"+auxiliar+")");
+		Resultados.add(resultado);
+		}else{
+			System.out.println("El valor no es del tipo correcto");
+}
+RESULT=auxiliar;
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -962,7 +1062,7 @@ RESULT=comparacion(t1,t2,"<");
 		Location nxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location nxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		String n = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG19
+		//@@CUPDBG22
  RESULT = n;           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -975,9 +1075,14 @@ RESULT=comparacion(t1,t2,"<");
 		Location idxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
 		Location idxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
 		String id = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		//@@CUPDBG20
+		//@@CUPDBG23
 
-
+Simbolo simbolo = tabla.buscar(id);
+	if(tabla.buscar(id)==null){
+		System.out.println("La variable (" +id+ ") no ha sido declarada");
+}else{ 
+RESULT=simbolo.valor;
+}
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -987,7 +1092,7 @@ RESULT=comparacion(t1,t2,"<");
           case 32: // T ::= TRUE 
             {
               String RESULT =null;
-		//@@CUPDBG21
+		//@@CUPDBG24
  RESULT = "True";           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -997,7 +1102,7 @@ RESULT=comparacion(t1,t2,"<");
           case 33: // T ::= FALSO 
             {
               String RESULT =null;
-		//@@CUPDBG22
+		//@@CUPDBG25
  RESULT = "False";           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -1007,7 +1112,16 @@ RESULT=comparacion(t1,t2,"<");
           case 34: // T ::= SIG T 
             {
               String RESULT =null;
-
+		Location sxleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xleft;
+		Location sxright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xright;
+		Object s = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		Location t1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xleft;
+		Location t1xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.peek()).xright;
+		String t1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		//@@CUPDBG26
+ 
+System.out.println(s+t1);
+RESULT = s + t1;   
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1016,7 +1130,11 @@ RESULT=comparacion(t1,t2,"<");
           case 35: // T ::= LPAREN T RPAREN 
             {
               String RESULT =null;
-
+		Location t1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xleft;
+		Location t1xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).xright;
+		String t1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
+		//@@CUPDBG27
+ RESULT = t1;           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("T",9, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1025,8 +1143,8 @@ RESULT=comparacion(t1,t2,"<");
           case 36: // SIG ::= MINUS 
             {
               Object RESULT =null;
-		//@@CUPDBG23
- RESULT = -1.0;           
+		//@@CUPDBG28
+ RESULT ="-";           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("SIG",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -1035,8 +1153,8 @@ RESULT=comparacion(t1,t2,"<");
           case 37: // SIG ::= PLUS 
             {
               Object RESULT =null;
-		//@@CUPDBG24
- RESULT = 1.0;           
+		//@@CUPDBG29
+ RESULT = "";           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("SIG",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
