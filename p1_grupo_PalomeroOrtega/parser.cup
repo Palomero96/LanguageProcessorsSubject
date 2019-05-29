@@ -261,7 +261,7 @@ terminal String NUMBER; //Cambiamos a double los numeros
 
 /* Non terminals */
 
-non terminal S, A, D, L,E, C, O,B, Q,SIG;
+non terminal S, A, D, L,E, C,O,B, Q,SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
 non terminal String T;      // used to store evaluated subexpressions
 
@@ -281,27 +281,13 @@ S::= S E SEMI| E SEMI ;// revisar si esta bien lo de el SEMI
 /* Sentencias*/
 E::= A | D | T:t {: //System.out.println(t);System.out.println(ObtenerResultado(t));
 					           :} 
-| L | C;
+| L | C | O;
 
-/* Bucle*/
-L::= MIENTRAS T S FINMIENTRAS;
-
-/* Condicional*/
-C::= SI T:t1 {: 
+/* Bucle */
+L::= MIENTRAS T:t1  {: 
 Estructura Condicional  = new Estructura();
-Condicional.Fin= "dasdsad";
-RESULT = Condicional;
-if (RESULT instanceof Estructura){
-System.out.println("Soy una estructura");
-
-}
-//RESULT.Fin = "hola";
-System.out.println(RESULT.Fin);
-
-/* newLabel();
-RESULT.Inicio= newLabel();
-System.out.println(Condicional.Fin);
-System.out.println(Condicional.Inicio);
+Condicional.Fin = newLabel(); //Etiqueta final
+Condicional.Inicio= newLabel();//Etiqueta inicio
 String Resultado="";
 if(t1=="True" || t1=="False" || t1.contains("tmp")){
 		if(t1.contains("tmp")){
@@ -318,14 +304,71 @@ if(t1=="True" || t1=="False" || t1.contains("tmp")){
 if(Resultado=="True"){
  
 }else{
-generarCuarteto("(gotofc,"+t1+", ,"+RESULT.Inicio+")");
-}*/
-					           :}  ENTONCES S O FINSI {: 
-//generarCuarteto("(Label,"+ RESULT.Fin +",,)");
-//System.out.println(hola);
-					           :};
+generarCuarteto("(gotofc,"+t1+", ,"+Condicional.Fin+")");
+}
+RESULT= Condicional;
+:} S FINMIENTRAS {: 
+generarCuarteto("(goto,"+((Estructura) RESULT).Inicio+",,)");
+generarCuarteto("(label,"+ ((Estructura) RESULT).Fin +",,)");
+:};
 
-O::= | SINO S;
+/* Condicional*/
+C::= SI:s T:t1 {: 
+System.out.println(s);
+Estructura Condicional  = new Estructura();
+Condicional.Fin = newLabel();
+Condicional.Inicio= newLabel();
+String Resultado="";
+if(t1=="True" || t1=="False" || t1.contains("tmp")){
+		if(t1.contains("tmp")){
+				String bol=buscarResultado(t1);
+				if(bol=="True" || bol=="False"){
+					Resultado=bol;
+					}else{
+						System.out.println("La condicion no es un valor booleano");
+					}
+			}else{
+			Resultado=t1;
+			}
+		}
+if(Resultado=="True"){
+ 
+}else{
+generarCuarteto("(gotofc,"+t1+", ,"+Condicional.Fin+")");
+}
+	RESULT=Condicional;		
+           :}  
+ ENTONCES S:s1 FINSI {:
+generarCuarteto("(goto,"+((Estructura) RESULT).Fin+",,)");
+generarCuarteto("(label,"+ ((Estructura) RESULT).Fin +",,)");
+					           :} 
+					           
+|  SI T:t1  {: Estructura Condicional  = new Estructura();
+Condicional.Fin = newLabel();
+Condicional.Inicio= newLabel();
+Condicional.Medio= newLabel();
+String Resultado="";
+if(t1=="True" || t1=="False" || t1.contains("tmp")){
+		if(t1.contains("tmp")){
+				String bol=buscarResultado(t1);
+				if(bol=="True" || bol=="False"){
+					Resultado=bol;
+					}else{
+						System.out.println("La condicion no es un valor booleano");
+					}
+			}else{
+			Resultado=t1;
+			}
+		}
+if(Resultado=="True"){
+ 
+}else{
+generarCuarteto("(gotofc,"+t1+", ,"+Condicional.Fin+")");
+}
+	RESULT=Condicional;				          :}  ENTONCES S:s2 SINO S:s1 {: :} FINSI {: :};
+
+//SI T    ENTONCES S SINO S    FINSI
+//SI T     ENTONCES S  FINSI
 
 /* Declaraciones*/
 D::= REAL ID:s Q {: 

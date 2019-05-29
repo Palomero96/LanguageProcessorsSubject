@@ -13,3 +13,6 @@
  NOT 4>2;
  SI 4<2 ENTONCES vari=3; 
  3+5; FINSI;
+ MIENTRAS 4<2 AND 3<2 
+ vari=2;
+ FINMIENTRAS;

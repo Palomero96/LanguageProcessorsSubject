@@ -108,7 +108,7 @@ ID = [a-zA-Z][a-zA-Z0-9]*
   "OR"    {return symbolFactory.newSymbol("OR", OR);}
   "NOT"   {return symbolFactory.newSymbol("NOT", NOT);}
   //BUCLES Y CONDICIONALES
-  "SI"    {return symbolFactory.newSymbol("SI", SI);}
+  "SI"    {return symbolFactory.newSymbol("SI", SI, "L0");}
   "SINO"    {return symbolFactory.newSymbol("SINO", SINO);}
   "ENTONCES"    {return symbolFactory.newSymbol("ENTONCES", ENTONCES);}
   "FINSI"    {return symbolFactory.newSymbol("FINSI", FINSI);}
