@@ -18,7 +18,15 @@ static TablaSimbolos tabla = new TablaSimbolos();
 
 :}
 action code {:
+class Estructura{
+String Inicio, Medio, Fin;
+Estructura(){
+this.Inicio="";
+this.Medio="";
+this.Fin="";
+}
 
+}
 ArrayList<String> Resultados = new ArrayList<String>(); //Para almacenar los resultados del string
 int linea=1;
 int tmp=0;
@@ -27,11 +35,23 @@ String aux= "tmp"+tmp;
 tmp++;
 return aux;
 }
+int label=0;
+private String newLabel(){
+String aux= "L"+label;
+label++;
+return aux;
+}
 /* Metodo para buscar el Resultado en el array*/
 private String buscarResultado(String aux){
 String auxuno = aux.substring(3);
 int indice = Integer.parseInt(auxuno);
 return Resultados.get(indice);
+}
+/* Metodo para cambiar los resultados */ 
+private int cambiarResultado(String aux){
+String auxuno = aux.substring(3);
+int indice = Integer.parseInt(auxuno);
+return indice;
 }
 /* Metodo para obtener el Resultado para comprobar el tipo*/
 private String ObtenerResultado(String s){
@@ -174,7 +194,7 @@ String resultado="";
 						System.out.println("El segundo valor de la operacion no tiene el tipo adecuado");
 					}
 			}else{
-			ResultadoDos=t1;
+			ResultadoDos=t2;
 			correctos++;
 			}
 		}
@@ -241,7 +261,7 @@ terminal String NUMBER; //Cambiamos a double los numeros
 
 /* Non terminals */
 
-non terminal S, A, D, L,E, C,B, Q,SIG;
+non terminal S, A, D, L,E, C, O,B, Q,SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
 non terminal String T;      // used to store evaluated subexpressions
 
@@ -267,7 +287,45 @@ E::= A | D | T:t {: //System.out.println(t);System.out.println(ObtenerResultado(
 L::= MIENTRAS T S FINMIENTRAS;
 
 /* Condicional*/
-C::= SI T ENTONCES S FINSI | SI T ENTONCES S SINO S FINSI;
+C::= SI T:t1 {: 
+Estructura Condicional  = new Estructura();
+Condicional.Fin= "dasdsad";
+RESULT = Condicional;
+if (RESULT instanceof Estructura){
+System.out.println("Soy una estructura");
+
+}
+//RESULT.Fin = "hola";
+System.out.println(RESULT.Fin);
+
+/* newLabel();
+RESULT.Inicio= newLabel();
+System.out.println(Condicional.Fin);
+System.out.println(Condicional.Inicio);
+String Resultado="";
+if(t1=="True" || t1=="False" || t1.contains("tmp")){
+		if(t1.contains("tmp")){
+				String bol=buscarResultado(t1);
+				if(bol=="True" || bol=="False"){
+					Resultado=bol;
+					}else{
+						System.out.println("La condicion no es un valor booleano");
+					}
+			}else{
+			Resultado=t1;
+			}
+		}
+if(Resultado=="True"){
+ 
+}else{
+generarCuarteto("(gotofc,"+t1+", ,"+RESULT.Inicio+")");
+}*/
+					           :}  ENTONCES S O FINSI {: 
+//generarCuarteto("(Label,"+ RESULT.Fin +",,)");
+//System.out.println(hola);
+					           :};
+
+O::= | SINO S;
 
 /* Declaraciones*/
 D::= REAL ID:s Q {: 
@@ -435,8 +493,22 @@ RESULT=simbolo.valor;
   | TRUE {: RESULT = "True";           :}
   | FALSO {: RESULT = "False";           :}
   | SIG:s T:t1 {: 
-System.out.println(s+t1);
-RESULT = s + t1;   :}
+
+try {		if(t1.contains("tmp")){
+			String resultado=ObtenerResultado(t1);
+			resultado = s+ resultado;
+			int indice = cambiarResultado(t1);
+			Double.parseDouble(resultado);
+			Resultados.set(indice,resultado);
+			RESULT = s + resultado;
+			}else{
+			Double.parseDouble(t1);
+			RESULT = s + t1;
+			}
+	}catch(NumberFormatException e){
+			System.out.println("No es un numero");
+}
+ :}
   | LPAREN T:t1 RPAREN {: RESULT = t1;           :};
 /* Signo */
 SIG ::=    MINUS      {: RESULT ="-";           :}
