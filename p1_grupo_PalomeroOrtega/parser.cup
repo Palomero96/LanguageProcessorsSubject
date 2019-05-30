@@ -28,7 +28,7 @@ this.Fin="";
 
 }
 ArrayList<String> Resultados = new ArrayList<String>(); //Para almacenar los resultados del string
-Estructura res  = new Estructura();
+ArrayList<Estructura> ressPila  = new ArrayList<Estructura>();
 int linea=1;
 int tmp=0;
 private String newTmp(){
@@ -331,27 +331,35 @@ C::= SI:s T:t1 ENTONCES{:
 				}
 			}
 		generarCuarteto("(gotofc,"+t1+", ,"+Condicional.Medio+")");
-		res = Condicional;
+		//Añadimos al final del array
+		ressPila.add(Condicional);
 		RESULT=Condicional;		
            :}  
  S O;
 				           
 O::= FINSI {:
-if(RESULT ==null)
-	RESULT = res;
+
+//Recogemos el último resultado del array
+RESULT = ressPila.get(ressPila.size()-1);
 generarCuarteto("(goto,"+((Estructura) RESULT).Medio+",,)");
 generarCuarteto("(label,"+ ((Estructura) RESULT).Medio +",,)");
+//eliminamos el último elemento del array, para utilizar el anterior IF
+ressPila.remove(ressPila.size()-1);
 				           :}
 | SINO{:
-if(RESULT ==null)
-	RESULT = res;
+
+//Recogemos el último resultado del array
+RESULT = ressPila.get(ressPila.size()-1);
 generarCuarteto("(label,"+ ((Estructura) RESULT).Medio +",,)");:}  S {:
 generarCuarteto("(goto,"+((Estructura) RESULT).Fin+",,)");
 
 				           :} FINSI {:
-if(RESULT ==null)
-	RESULT = res;
+
+//Recogemos el último resultado del array
+RESULT = ressPila.get(ressPila.size()-1);
 generarCuarteto("(label,"+ ((Estructura) RESULT).Fin +",,)");
+//eliminamos el último elemento del array, para utilizar el anterior IF
+ressPila.remove(ressPila.size()-1);
 				           :};
 
 /* Declaraciones*/

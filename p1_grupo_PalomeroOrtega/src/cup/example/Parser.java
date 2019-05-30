@@ -363,7 +363,7 @@ this.Fin="";
 
 }
 ArrayList<String> Resultados = new ArrayList<String>(); //Para almacenar los resultados del string
-Estructura res  = new Estructura();
+ArrayList<Estructura> ressPila  = new ArrayList<Estructura>();
 int linea=1;
 int tmp=0;
 private String newTmp(){
@@ -720,7 +720,6 @@ RESULT= Condicional;
  
 generarCuarteto("(goto,"+((Estructura) RESULT).Inicio+",,)");
 generarCuarteto("(label,"+ ((Estructura) RESULT).Fin +",,)");
-label = label-2;
 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("L",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -756,7 +755,8 @@ label = label-2;
 				}
 			}
 		generarCuarteto("(gotofc,"+t1+", ,"+Condicional.Medio+")");
-		res = Condicional;
+		//Añadimos al final del array
+		ressPila.add(Condicional);
 		RESULT=Condicional;		
            
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("NT$1",12, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -786,12 +786,13 @@ label = label-2;
               Object RESULT =null;
 		//@@CUPDBG7
 
-if(RESULT ==null)
-	RESULT = res;
+
+//Recogemos el último resultado del array
+RESULT = ressPila.get(ressPila.size()-1);
 generarCuarteto("(goto,"+((Estructura) RESULT).Medio+",,)");
 generarCuarteto("(label,"+ ((Estructura) RESULT).Medio +",,)");
-//Por si queremos resetear el contador de etiquetas
-label=label-3;
+//eliminamos el último elemento del array, para utilizar el anterior IF
+ressPila.remove(ressPila.size()-1);
 				           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("O",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -803,8 +804,9 @@ label=label-3;
               Object RESULT =null;
 //@@CUPDBG8
 
-if(RESULT ==null)
-	RESULT = res;
+
+//Recogemos el último resultado del array
+RESULT = ressPila.get(ressPila.size()-1);
 generarCuarteto("(label,"+ ((Estructura) RESULT).Medio +",,)");
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("NT$2",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -831,11 +833,12 @@ generarCuarteto("(goto,"+((Estructura) RESULT).Fin+",,)");
                 RESULT = (Object) ((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		//@@CUPDBG10
 
-if(RESULT ==null)
-	RESULT = res;
+
+//Recogemos el último resultado del array
+RESULT = ressPila.get(ressPila.size()-1);
 generarCuarteto("(label,"+ ((Estructura) RESULT).Fin +",,)");
-//Por si queremos resetear el contador de etiquetas
-label=label-3;
+//eliminamos el último elemento del array, para utilizar el anterior IF
+ressPila.remove(ressPila.size()-1);
 				           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("O",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
