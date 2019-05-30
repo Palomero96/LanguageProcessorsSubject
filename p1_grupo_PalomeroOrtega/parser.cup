@@ -280,7 +280,7 @@ precedence left UMINUS;
 S::= S E | E ;// revisar si esta bien lo de el SEMI
 
 /* Sentencias*/
-E::= A SEMI | D SEMI | T:t SEMI | L | C;
+E::= A SEMI{:System.out.println();:} | D SEMI{:System.out.println();:} | T:t SEMI{:System.out.println();:} | L | C;
 
 /* Bucle */
 L::= MIENTRAS T:t1  {: 
