@@ -28,6 +28,7 @@ this.Fin="";
 
 }
 ArrayList<String> Resultados = new ArrayList<String>(); //Para almacenar los resultados del string
+Estructura res  = new Estructura();
 int linea=1;
 int tmp=0;
 private String newTmp(){
@@ -261,7 +262,7 @@ terminal String NUMBER; //Cambiamos a double los numeros
 
 /* Non terminals */
 
-non terminal S, A, D, L,E, C,O,B, Q,SIG;
+non terminal S, A, D, L, E, C, O, B, Q, SIG;
 //non terminal Integer    expr;      // used to store evaluated subexpressions
 non terminal String T;      // used to store evaluated subexpressions
 
@@ -276,12 +277,10 @@ precedence left UMINUS;
 /* The grammar rules */
 
  /*Axioma */
-S::= S E SEMI| E SEMI ;// revisar si esta bien lo de el SEMI
+S::= S E | E ;// revisar si esta bien lo de el SEMI
 
 /* Sentencias*/
-E::= A | D | T:t {: //System.out.println(t);System.out.println(ObtenerResultado(t));
-					           :} 
-| L | C | O;
+E::= A SEMI | D SEMI | T:t SEMI | L | C;
 
 /* Bucle */
 L::= MIENTRAS T:t1  {: 
@@ -313,62 +312,47 @@ generarCuarteto("(label,"+ ((Estructura) RESULT).Fin +",,)");
 :};
 
 /* Condicional*/
-C::= SI:s T:t1 {: 
-System.out.println(s);
-Estructura Condicional  = new Estructura();
-Condicional.Fin = newLabel();
-Condicional.Inicio= newLabel();
-String Resultado="";
-if(t1=="True" || t1=="False" || t1.contains("tmp")){
-		if(t1.contains("tmp")){
-				String bol=buscarResultado(t1);
-				if(bol=="True" || bol=="False"){
-					Resultado=bol;
-					}else{
-						System.out.println("La condicion no es un valor booleano");
-					}
-			}else{
-			Resultado=t1;
+C::= SI:s T:t1 ENTONCES{: 
+	Estructura Condicional  = new Estructura();
+	Condicional.Fin = newLabel();
+	Condicional.Medio = newLabel();
+	Condicional.Inicio= newLabel();
+	String Resultado="";
+	if(t1=="True" || t1=="False" || t1.contains("tmp")){
+			if(t1.contains("tmp")){
+					String bol=buscarResultado(t1);
+					if(bol=="True" || bol=="False"){
+						Resultado=bol;
+						}else{
+							System.out.println("La condicion no es un valor booleano");
+						}
+				}else{
+				Resultado=t1;
+				}
 			}
-		}
-if(Resultado=="True"){
- 
-}else{
-generarCuarteto("(gotofc,"+t1+", ,"+Condicional.Fin+")");
-}
-	RESULT=Condicional;		
+		generarCuarteto("(gotofc,"+t1+", ,"+Condicional.Medio+")");
+		res = Condicional;
+		RESULT=Condicional;		
            :}  
- ENTONCES S:s1 FINSI {:
+ S O;
+				           
+O::= FINSI {:
+if(RESULT ==null)
+	RESULT = res;
+generarCuarteto("(goto,"+((Estructura) RESULT).Medio+",,)");
+generarCuarteto("(label,"+ ((Estructura) RESULT).Medio +",,)");
+				           :}
+| SINO{:
+if(RESULT ==null)
+	RESULT = res;
+generarCuarteto("(label,"+ ((Estructura) RESULT).Medio +",,)");:}  S {:
 generarCuarteto("(goto,"+((Estructura) RESULT).Fin+",,)");
-generarCuarteto("(label,"+ ((Estructura) RESULT).Fin +",,)");
-					           :} 
-					           
-|  SI T:t1  {: Estructura Condicional  = new Estructura();
-Condicional.Fin = newLabel();
-Condicional.Inicio= newLabel();
-Condicional.Medio= newLabel();
-String Resultado="";
-if(t1=="True" || t1=="False" || t1.contains("tmp")){
-		if(t1.contains("tmp")){
-				String bol=buscarResultado(t1);
-				if(bol=="True" || bol=="False"){
-					Resultado=bol;
-					}else{
-						System.out.println("La condicion no es un valor booleano");
-					}
-			}else{
-			Resultado=t1;
-			}
-		}
-if(Resultado=="True"){
- 
-}else{
-generarCuarteto("(gotofc,"+t1+", ,"+Condicional.Fin+")");
-}
-	RESULT=Condicional;				          :}  ENTONCES S:s2 SINO S:s1 {: :} FINSI {: :};
 
-//SI T    ENTONCES S SINO S    FINSI
-//SI T     ENTONCES S  FINSI
+				           :} FINSI {:
+if(RESULT ==null)
+	RESULT = res;
+generarCuarteto("(label,"+ ((Estructura) RESULT).Fin +",,)");
+				           :};
 
 /* Declaraciones*/
 D::= REAL ID:s Q {: 

@@ -11,8 +11,11 @@
  4-2;
  4>2 OR 4==2;
  NOT 4>2;
- SI 4<2 ENTONCES vari=3; 
- 3+5; FINSI;
+ 
+ SI 2>1 ENTONCES vari=2; SINO vari=1; FINSI
+ 
+ SI 4<2 ENTONCES vari=3; 3+5; FINSI
+ 
  MIENTRAS 4<2 AND 3<2 
  vari=2;
- FINMIENTRAS;
+ FINMIENTRAS
