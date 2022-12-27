@@ -1,2 +1,3 @@
-# ProcesadoresdeLenguaje
-Practica de la asignatura de Procesadores de Lenguaje
+# Language Processors Subject
+
+Practice for Language Processors Subject. It is code in Java.
